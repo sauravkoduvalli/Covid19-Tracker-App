@@ -1,5 +1,7 @@
+import 'package:covid19_tracker/screens/country_details_screen.dart';
 import 'package:covid19_tracker/services/status_services.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CountriesListScreen extends StatefulWidget {
@@ -29,9 +31,7 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
               TextField(
                 controller: searchController,
                 onChanged: (value) {
-                  setState(() {
-
-                  });
+                  setState(() {});
                 },
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search),
@@ -53,69 +53,98 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                         itemCount: snapshot.data!.length,
                         itemBuilder: (BuildContext ctx, index) {
                           String name = snapshot.data![index]['country'];
-                          if(searchController.text.isEmpty) {
+                          if (searchController.text.isEmpty) {
                             return Column(
                               children: [
-                                ListTile(
-                                  leading: Image(
-                                    height: 30,
-                                    width: 50,
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                      snapshot.data![index]['countryInfo']
-                                      ['flag'],
+                                InkWell(
+                                  onTap: () => {
+                                    Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        child: CountryDetailsScreen(
+                                          image: snapshot.data![index]
+                                              ['countryInfo']['flag'].toString(),
+                                          countryName: snapshot.data![index]['country'],
+                                          totalCases: snapshot.data![index]['totalCases'],
+                                          active: snapshot.data![index]['active'],
+                                          todayCases: snapshot.data![index]['todayCases'],
+                                          totalDeaths: snapshot.data![index]['totalDeaths'],
+                                          todayRecovered: snapshot.data![index]['todayRecovered'],
+                                          totalRecovered: snapshot.data![index]['totalRecovered'],
+                                          critical: snapshot.data![index]['critical'],
+                                          todayDeaths: snapshot.data![index]['todayDeaths'],
+                                        ),
+                                        type: PageTransitionType.fade,
+                                      ),
                                     ),
+                                  },
+                                  child: ListTile(
+                                    leading: Image(
+                                      height: 30,
+                                      width: 50,
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                        snapshot.data![index]['countryInfo']
+                                            ['flag'],
+                                      ),
+                                    ),
+                                    title:
+                                        Text(snapshot.data![index]['country']),
+                                    subtitle: Text(snapshot.data![index]
+                                            ['countryInfo']['iso3']
+                                        .toString()),
                                   ),
-                                  title: Text(snapshot.data![index]['country']),
-                                  subtitle: Text(snapshot.data![index]
-                                  ['countryInfo']['iso3']
-                                      .toString()),
                                 ),
                               ],
                             );
-                          }else if(name.toLowerCase().contains(searchController.text.toLowerCase())) {
+                          } else if (name
+                              .toLowerCase()
+                              .contains(searchController.text.toLowerCase())) {
                             return Column(
                               children: [
-                                ListTile(
-                                  leading: Image(
-                                    height: 30,
-                                    width: 50,
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                      snapshot.data![index]['countryInfo']
-                                      ['flag'],
+                                InkWell(
+                                  onTap: () => {
+                                    Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        child: CountryDetailsScreen(
+                                          image: snapshot.data![index]
+                                          ['countryInfo']['flag'].toString(),
+                                          countryName: snapshot.data![index]['country'],
+                                          totalCases: snapshot.data![index]['totalCases'],
+                                          active: snapshot.data![index]['active'],
+                                          todayCases: snapshot.data![index]['todayCases'],
+                                          totalDeaths: snapshot.data![index]['totalDeaths'],
+                                          todayRecovered: snapshot.data![index]['todayRecovered'],
+                                          totalRecovered: snapshot.data![index]['totalRecovered'],
+                                          critical: snapshot.data![index]['critical'],
+                                          todayDeaths: snapshot.data![index]['todayDeaths'],
+                                        ),
+                                        type: PageTransitionType.fade,
+                                      ),
                                     ),
+                                  },
+                                  child: ListTile(
+                                    leading: Image(
+                                      height: 30,
+                                      width: 50,
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                        snapshot.data![index]['countryInfo']
+                                            ['flag'],
+                                      ),
+                                    ),
+                                    title: Text(snapshot.data![index]['country']),
+                                    subtitle: Text(snapshot.data![index]
+                                            ['countryInfo']['iso3']
+                                        .toString()),
                                   ),
-                                  title: Text(snapshot.data![index]['country']),
-                                  subtitle: Text(snapshot.data![index]
-                                  ['countryInfo']['iso3']
-                                      .toString()),
                                 ),
                               ],
                             );
-                          }else {
+                          } else {
                             return Container();
-
                           }
-                          return Column(
-                            children: [
-                              ListTile(
-                                leading: Image(
-                                  height: 30,
-                                  width: 50,
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                    snapshot.data![index]['countryInfo']
-                                        ['flag'],
-                                  ),
-                                ),
-                                title: Text(snapshot.data![index]['country']),
-                                subtitle: Text(snapshot.data![index]
-                                        ['countryInfo']['iso3']
-                                    .toString()),
-                              ),
-                            ],
-                          );
                         },
                       );
                     } else {
