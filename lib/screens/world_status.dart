@@ -1,6 +1,6 @@
 import 'package:covid19_tracker/models/world_status_model.dart';
 import 'package:covid19_tracker/screens/countries_list.dart';
-import 'package:covid19_tracker/services/states_services.dart';
+import 'package:covid19_tracker/services/status_services.dart';
 import 'package:covid19_tracker/widgets/reusable_row_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -40,7 +40,7 @@ class _WorldStatusScreenState extends State<WorldStatusScreen>
 
   @override
   Widget build(BuildContext context) {
-    StatesServices statesServices = StatesServices();
+    StatusServices statesServices = StatusServices();
     return Scaffold(
       body: SafeArea(
         child: Padding(
