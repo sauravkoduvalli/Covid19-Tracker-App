@@ -1,16 +1,19 @@
-# covid19_tracker
+## Covid-19 Tracker App using Flutter
 
-A new Flutter project.
+  A simple and clean Covid-19 Tracker App, works in both andoid and iOS.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Animated Splash screen.
+- Diagramtic representaions using Pi-chart.
+- Representaion of World Covid details in a nutshell.
+- Real-time data from APIs.
+- Shimmer animation effect.
+- Search countries.
+- Track covid details of each country in deatial.
 
-A few resources to get you started if this is your first Flutter project:
+## Tech Used
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Client side : Flutter
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+APIs : 'https://disease.sh/v3/covid-19/all' and 'https://disease.sh/v3/covid-19/countries'.
