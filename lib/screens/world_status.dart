@@ -3,7 +3,7 @@ import 'package:covid19_tracker/screens/countries_list.dart';
 import 'package:covid19_tracker/services/status_services.dart';
 import 'package:covid19_tracker/widgets/reusable_row_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pie_chart/pie_chart.dart';
 
@@ -20,6 +20,8 @@ class _WorldStatusScreenState extends State<WorldStatusScreen>
     vsync: this,
     duration: const Duration(milliseconds: 3500),
   );
+
+  late final DateTime currentBackPressTime;
 
   final colorList = <Color>[
     const Color(0xff4285F4),
@@ -49,10 +51,11 @@ class _WorldStatusScreenState extends State<WorldStatusScreen>
           elevation: 1,
           title: const Text("Covid-19 Tracker"),
         ),
-        body: Padding(
+        body: WillPopScope(
+          onWillPop: onWillPop,
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: ListView(
-              shrinkWrap: true,
               children: [
                 SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                 FutureBuilder(
@@ -73,8 +76,10 @@ class _WorldStatusScreenState extends State<WorldStatusScreen>
                                 "Recovered": double.parse(recovered.toString()),
                                 "Death": double.parse(death.toString()),
                               },
-                              animationDuration: const Duration(milliseconds: 1500),
-                              chartRadius: MediaQuery.of(context).size.width / 3,
+                              animationDuration:
+                                  const Duration(milliseconds: 1500),
+                              chartRadius:
+                                  MediaQuery.of(context).size.width / 3,
                               chartType: ChartType.ring,
                               colorList: colorList,
                               chartValuesOptions: const ChartValuesOptions(
@@ -94,35 +99,42 @@ class _WorldStatusScreenState extends State<WorldStatusScreen>
                           // Covid details card
                           Container(
                             padding: EdgeInsets.symmetric(
-                              vertical: MediaQuery.of(context).size.height * 0.05,
+                              vertical:
+                                  MediaQuery.of(context).size.height * 0.05,
                               horizontal: 0.0,
                             ),
                             child: Card(
                               child: Column(
                                 children: [
                                   ReusableRow(
-                                      title: "Total",
-                                      value: snapshot.data!.cases.toString()),
+                                    title: "Total",
+                                    value: snapshot.data!.cases.toString(),
+                                  ),
                                   ReusableRow(
-                                      title: "Death",
-                                      value: snapshot.data!.deaths.toString()),
+                                    title: "Death",
+                                    value: snapshot.data!.deaths.toString(),
+                                  ),
                                   ReusableRow(
-                                      title: "Recovered",
-                                      value: snapshot.data!.recovered.toString()),
+                                    title: "Recovered",
+                                    value: snapshot.data!.recovered.toString(),
+                                  ),
                                   ReusableRow(
-                                      title: "Active",
-                                      value: snapshot.data!.active.toString()),
+                                    title: "Active",
+                                    value: snapshot.data!.active.toString(),
+                                  ),
                                   ReusableRow(
-                                      title: "Critical",
-                                      value: snapshot.data!.critical.toString()),
+                                    title: "Critical",
+                                    value: snapshot.data!.critical.toString(),
+                                  ),
                                   ReusableRow(
                                       title: "Today Death",
-                                      value:
-                                          snapshot.data!.todayDeaths.toString()),
-                                  ReusableRow(
-                                      title: "Today Recovered",
-                                      value: snapshot.data!.todayRecovered
+                                      value: snapshot.data!.todayDeaths
                                           .toString()),
+                                  ReusableRow(
+                                    title: "Today Recovered",
+                                    value: snapshot.data!.todayRecovered
+                                        .toString(),
+                                  ),
                                 ],
                               ),
                             ),
@@ -146,7 +158,7 @@ class _WorldStatusScreenState extends State<WorldStatusScreen>
                                 style: TextStyle(fontSize: 15),
                               ),
                               style: ElevatedButton.styleFrom(
-                                primary: Color(0xff1aa260),
+                                primary: const Color(0xff1aa260),
                                 // shape: const StadiumBorder(),
                               ),
                             ),
@@ -154,20 +166,42 @@ class _WorldStatusScreenState extends State<WorldStatusScreen>
                         ],
                       );
                     } else {
-                      return const Align(
-                        alignment: Alignment.center,
-                        child: SpinKitFadingCircle(
-                          color: Colors.white,
-                          size: 50.0,
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height / 1.3,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
                         ),
                       );
+                      // return Column(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   crossAxisAlignment: CrossAxisAlignment.center,
+                      //   children: const [
+                      //     SpinKitFadingCircle(
+                      //       color: Colors.white70,
+                      //       size: 50.0,
+                      //     ),
+                      //   ],
+                      // );
                     }
                   },
                 ),
               ],
             ),
           ),
+        ),
       ),
     );
+  }
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: "Are you sure want to close the app?");
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 }
