@@ -41,119 +41,132 @@ class _WorldStatusScreenState extends State<WorldStatusScreen>
   @override
   Widget build(BuildContext context) {
     StatusServices statesServices = StatusServices();
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-              FutureBuilder(
-                future: statesServices.fetchWorldStatesData(),
-                builder: (context, AsyncSnapshot<WorldStatusModel> snapshot) {
-                  if (snapshot.hasData) {
-                    var cases = snapshot.data!.cases;
-                    var recovered = snapshot.data!.recovered;
-                    var death = snapshot.data!.deaths;
-                    return Column(
-                      children: [
-                        PieChart(
-                          dataMap: {
-                            "Total": double.parse(cases.toString()),
-                            "Recovered": double.parse(recovered.toString()),
-                            "Death": double.parse(death.toString()),
-                          },
-                          animationDuration: const Duration(milliseconds: 1500),
-                          chartRadius: MediaQuery.of(context).size.width / 3,
-                          chartType: ChartType.ring,
-                          colorList: colorList,
-                          chartValuesOptions: const ChartValuesOptions(
-                            showChartValuesInPercentage: true,
-                          ),
-                          legendOptions: const LegendOptions(
-                            showLegendsInRow: false,
-                            legendPosition: LegendPosition.left,
-                            showLegends: true,
-                            legendShape: BoxShape.circle,
-                            legendTextStyle: TextStyle(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: MediaQuery.of(context).size.height * 0.05,
-                            horizontal: 0.0,
-                          ),
-                          child: Card(
-                            child: Column(
-                              children: [
-                                ReusableRow(
-                                    title: "Total",
-                                    value: snapshot.data!.cases.toString()),
-                                ReusableRow(
-                                    title: "Death",
-                                    value: snapshot.data!.deaths.toString()),
-                                ReusableRow(
-                                    title: "Recovered",
-                                    value: snapshot.data!.recovered.toString()),
-                                ReusableRow(
-                                    title: "Active",
-                                    value: snapshot.data!.active.toString()),
-                                ReusableRow(
-                                    title: "Critical",
-                                    value: snapshot.data!.critical.toString()),
-                                ReusableRow(
-                                    title: "Today Death",
-                                    value:
-                                        snapshot.data!.todayDeaths.toString()),
-                                ReusableRow(
-                                    title: "Today Recovered",
-                                    value: snapshot.data!.todayRecovered
-                                        .toString()),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 45,
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                PageTransition(
-                                  child: const CountriesListScreen(),
-                                  type: PageTransitionType.fade,
-                                ),
-                              );
-                            },
-                            child: const Text(
-                              "Track Countries",
-                              style: TextStyle(fontSize: 15),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Color(0xff1aa260),
-                              // shape: const StadiumBorder(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return const Expanded(
-                      flex: 1,
-                      child: SpinKitFadingCircle(
-                        color: Colors.white,
-                        size: 50.0,
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          elevation: 1,
+          title: const Text("Covid-19 Tracker"),
         ),
+        body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                FutureBuilder(
+                  future: statesServices.fetchWorldStatesData(),
+                  builder: (context, AsyncSnapshot<WorldStatusModel> snapshot) {
+                    if (snapshot.hasData) {
+                      var cases = snapshot.data!.cases;
+                      var recovered = snapshot.data!.recovered;
+                      var death = snapshot.data!.deaths;
+                      return Column(
+                        children: [
+                          // pie chart representation section
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: PieChart(
+                              dataMap: {
+                                "Total": double.parse(cases.toString()),
+                                "Recovered": double.parse(recovered.toString()),
+                                "Death": double.parse(death.toString()),
+                              },
+                              animationDuration: const Duration(milliseconds: 1500),
+                              chartRadius: MediaQuery.of(context).size.width / 3,
+                              chartType: ChartType.ring,
+                              colorList: colorList,
+                              chartValuesOptions: const ChartValuesOptions(
+                                showChartValuesInPercentage: true,
+                              ),
+                              legendOptions: const LegendOptions(
+                                showLegendsInRow: false,
+                                legendPosition: LegendPosition.left,
+                                showLegends: true,
+                                legendShape: BoxShape.circle,
+                                legendTextStyle: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Covid details card
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: MediaQuery.of(context).size.height * 0.05,
+                              horizontal: 0.0,
+                            ),
+                            child: Card(
+                              child: Column(
+                                children: [
+                                  ReusableRow(
+                                      title: "Total",
+                                      value: snapshot.data!.cases.toString()),
+                                  ReusableRow(
+                                      title: "Death",
+                                      value: snapshot.data!.deaths.toString()),
+                                  ReusableRow(
+                                      title: "Recovered",
+                                      value: snapshot.data!.recovered.toString()),
+                                  ReusableRow(
+                                      title: "Active",
+                                      value: snapshot.data!.active.toString()),
+                                  ReusableRow(
+                                      title: "Critical",
+                                      value: snapshot.data!.critical.toString()),
+                                  ReusableRow(
+                                      title: "Today Death",
+                                      value:
+                                          snapshot.data!.todayDeaths.toString()),
+                                  ReusableRow(
+                                      title: "Today Recovered",
+                                      value: snapshot.data!.todayRecovered
+                                          .toString()),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // navigation button
+                          SizedBox(
+                            height: 45,
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                    child: const CountriesListScreen(),
+                                    type: PageTransitionType.fade,
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                "Track Countries",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Color(0xff1aa260),
+                                // shape: const StadiumBorder(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const Align(
+                        alignment: Alignment.center,
+                        child: SpinKitFadingCircle(
+                          color: Colors.white,
+                          size: 50.0,
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
       ),
     );
   }

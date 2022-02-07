@@ -35,13 +35,31 @@ class _CountryDetailsScreenState extends State<CountryDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.countryName.toString()),
-        centerTitle: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 1,
+        automaticallyImplyLeading: true,
       ),
       body: SafeArea(
-        child: Column(
+        child: ListView(
+          shrinkWrap: true,
           children: [
-
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  margin: const EdgeInsets.symmetric(vertical: 15.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: NetworkImage(widget.image.toString()),
+                        fit: BoxFit.cover),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
