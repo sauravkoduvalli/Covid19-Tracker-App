@@ -16,4 +16,11 @@
 
 Client side : Flutter
 
-APIs : 'https://disease.sh/v3/covid-19/all' and 'https://disease.sh/v3/covid-19/countries'.
+APIs : 'https://disease.sh/v3/covid-19/all' and 'https://disease.sh/v3/covid-19/countries'
+
+## Screenshots
+
+<div>
+  <img src="readme/home_screen.png" width=250>
+  <img src="readme/counry_list.png" width=250>
+</div
