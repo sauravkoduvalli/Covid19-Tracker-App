@@ -27,6 +27,7 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
           automaticallyImplyLeading: true,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
+          centerTitle: true,
           title: const Text("Countries"),
         ),
         body: Padding(
@@ -69,7 +70,7 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                         return ListView.builder(
                           itemCount: snapshot.data!.length,
                           itemBuilder: (BuildContext ctx, index) {
-                            String name = snapshot.data![index]['country'];
+                            String countryName = snapshot.data![index]['country'];
                             if (searchController.text.isEmpty) {
                               return Column(
                                 children: [
@@ -114,7 +115,7 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                                   ),
                                 ],
                               );
-                            } else if (name
+                            } else if (countryName
                                 .toLowerCase()
                                 .contains(searchController.text.toLowerCase())) {
                               return Column(
