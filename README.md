@@ -14,7 +14,7 @@
 
 ## Tech Used
 
-Client side : Flutter
+Client side : Flutter, Dart
 
 APIs : 'https://disease.sh/v3/covid-19/all' and 'https://disease.sh/v3/covid-19/countries'
 
